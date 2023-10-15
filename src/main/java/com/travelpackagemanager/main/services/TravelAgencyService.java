@@ -4,6 +4,7 @@ import com.travelpackagemanager.main.dtos.AvailableActivitiesDto;
 import com.travelpackagemanager.main.dtos.ItineraryDetailsDto;
 import com.travelpackagemanager.main.dtos.PackageDetailsDto;
 import com.travelpackagemanager.main.dtos.PassengerDetailsDto;
+import com.travelpackagemanager.main.exceptions.RecordNotFoundException;
 import com.travelpackagemanager.main.models.Activity;
 import com.travelpackagemanager.main.models.Destination;
 import com.travelpackagemanager.main.models.Passenger;
@@ -29,10 +30,10 @@ public class TravelAgencyService {
     @Autowired
     private PassengerRepository passengerRepository;
 
-    public ItineraryDetailsDto getItinerary(Long packageId) {
+    public ItineraryDetailsDto getItinerary(Long packageId) throws RecordNotFoundException {
         TravelPackage travelPackage = travelPackageRepository
                 .findById(packageId)
-                .orElseThrow();
+                .orElseThrow(RecordNotFoundException::new);
         ItineraryDetailsDto itineraryDetailsDto = new ItineraryDetailsDto();
         itineraryDetailsDto.setTravelPackageName(travelPackage.getName());
         List<Destination> itineraryList = travelPackage.getItineraryList();
@@ -43,10 +44,10 @@ public class TravelAgencyService {
         return itineraryDetailsDto;
     }
 
-    public PackageDetailsDto getPackageDetails(Long packageId) {
+    public PackageDetailsDto getPackageDetails(Long packageId) throws RecordNotFoundException {
         TravelPackage travelPackage = travelPackageRepository
                 .findById(packageId)
-                .orElseThrow();
+                .orElseThrow(RecordNotFoundException::new);
         PackageDetailsDto packageDetailsDto = new PackageDetailsDto();
         packageDetailsDto.setPackageName(travelPackage.getName());
         packageDetailsDto.setPassengerCapacity(travelPackage.getCapacity());
@@ -55,10 +56,10 @@ public class TravelAgencyService {
         return packageDetailsDto;
     }
 
-    public PassengerDetailsDto getPassengerDetails(Long passengerId) {
+    public PassengerDetailsDto getPassengerDetails(Long passengerId) throws RecordNotFoundException {
         Passenger passenger = passengerRepository
                 .findById(passengerId)
-                .orElseThrow();
+                .orElseThrow(RecordNotFoundException::new);
         PassengerDetailsDto passengerDetailsDto = new PassengerDetailsDto();
         passengerDetailsDto.setPassengerName(passenger.getName());
         passengerDetailsDto.setPassengerNumber(passenger.getPassengerNumber());
@@ -83,10 +84,10 @@ public class TravelAgencyService {
         return passengerDetailsDto;
     }
 
-    public AvailableActivitiesDto getAvailableActivities(Long packageId) {
+    public AvailableActivitiesDto getAvailableActivities(Long packageId) throws RecordNotFoundException {
         TravelPackage travelPackage = travelPackageRepository
                 .findById(packageId)
-                .orElseThrow();
+                .orElseThrow(RecordNotFoundException::new);
         AvailableActivitiesDto availableActivitiesDto = new AvailableActivitiesDto();
         List<AvailableActivitiesDto.AvailableActivity> availableActivityList = new ArrayList<>();
         for (Destination destination : travelPackage.getItineraryList()) {

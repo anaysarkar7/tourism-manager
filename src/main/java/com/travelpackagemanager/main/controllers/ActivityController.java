@@ -1,6 +1,7 @@
 package com.travelpackagemanager.main.controllers;
 
 import com.travelpackagemanager.main.dtos.ActivityDto;
+import com.travelpackagemanager.main.exceptions.RecordNotFoundException;
 import com.travelpackagemanager.main.models.Activity;
 import com.travelpackagemanager.main.models.Destination;
 import com.travelpackagemanager.main.services.ActivityService;
@@ -17,7 +18,7 @@ public class ActivityController {
         return this.activityService.createActivity(activityDto);
     }
 
-    public Activity updateActivityDestination(Long activityId, Destination destination) {
+    public Activity updateActivityDestination(Long activityId, Destination destination) throws RecordNotFoundException {
         return this.activityService.updateActivityDestination(activityId, destination);
     }
 

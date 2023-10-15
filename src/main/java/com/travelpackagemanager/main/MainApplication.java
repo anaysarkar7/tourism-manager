@@ -3,6 +3,7 @@ package com.travelpackagemanager.main;
 import com.travelpackagemanager.main.controllers.*;
 import com.travelpackagemanager.main.dtos.*;
 import com.travelpackagemanager.main.enums.PassengerType;
+import com.travelpackagemanager.main.exceptions.RecordNotFoundException;
 import com.travelpackagemanager.main.models.Activity;
 import com.travelpackagemanager.main.models.Destination;
 import com.travelpackagemanager.main.models.Passenger;
@@ -23,7 +24,7 @@ public class MainApplication {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
-// CLIENT CODE
+    // CLIENT CODE
     @Autowired
     private TravelPackageController travelPackageController;
     @Autowired
@@ -37,7 +38,7 @@ public class MainApplication {
     @Autowired
     private PassengerController passengerController;
 
-    public void initialize() {
+    public void initialize() throws RecordNotFoundException {
         DestinationDto destinationDto1 = new DestinationDto();
         destinationDto1.setName("Bangalore");
         destinationDto1.setActivityList(new ArrayList<>());
@@ -199,7 +200,7 @@ public class MainApplication {
         System.out.println("list of each activity : ");
         for(Long destinationId:passengerDetailsDto.getDestinationToSignedUpActivities().keySet()) {
             List<PassengerDetailsDto.SignedUpActivityDetails> signedUpActivityDetailsList=passengerDetailsDto.getDestinationToSignedUpActivities().get(destinationId);
-            System.out.println("Destination: " + destinationRepository.findById(destinationId).orElseThrow().getName());
+            System.out.println("Destination: " + destinationRepository.findById(destinationId).orElseThrow(RecordNotFoundException::new).getName());
             for(PassengerDetailsDto.SignedUpActivityDetails signedUpActivityDetail: signedUpActivityDetailsList) {
                 System.out.println("Activity: "+signedUpActivityDetail.getActivityName());
                 System.out.println("Cost Paid: "+signedUpActivityDetail.getCostPaidByPassenger());

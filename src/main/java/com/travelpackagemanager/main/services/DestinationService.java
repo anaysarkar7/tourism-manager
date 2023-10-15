@@ -1,6 +1,7 @@
 package com.travelpackagemanager.main.services;
 
 import com.travelpackagemanager.main.dtos.DestinationDto;
+import com.travelpackagemanager.main.exceptions.RecordNotFoundException;
 import com.travelpackagemanager.main.models.Activity;
 import com.travelpackagemanager.main.models.Destination;
 import com.travelpackagemanager.main.repositories.DestinationRepository;
@@ -23,8 +24,8 @@ public class DestinationService {
         return this.destinationRepository.saveAll(this.destinationRepository.saveAll(destinationList));
     }
 
-    public Destination updateActivitiesInDestination(Long destinationId, List<Activity> activityList) {
-        Destination destination = destinationRepository.findById(destinationId).orElseThrow();
+    public Destination updateActivitiesInDestination(Long destinationId, List<Activity> activityList) throws RecordNotFoundException {
+        Destination destination = destinationRepository.findById(destinationId).orElseThrow(RecordNotFoundException::new);
         destination.setActivityList(activityList);
         return destinationRepository.save(destination);
     }

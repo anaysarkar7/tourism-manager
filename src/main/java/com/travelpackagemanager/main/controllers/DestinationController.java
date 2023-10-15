@@ -1,6 +1,7 @@
 package com.travelpackagemanager.main.controllers;
 
 import com.travelpackagemanager.main.dtos.DestinationDto;
+import com.travelpackagemanager.main.exceptions.RecordNotFoundException;
 import com.travelpackagemanager.main.models.Activity;
 import com.travelpackagemanager.main.models.Destination;
 import com.travelpackagemanager.main.services.DestinationService;
@@ -14,7 +15,7 @@ public class DestinationController {
     @Autowired
     private DestinationService destinationService;
 
-    public Destination updateActivitiesInDestination(Long destinationId, List<Activity> activityList) {
+    public Destination updateActivitiesInDestination(Long destinationId, List<Activity> activityList) throws RecordNotFoundException {
         return destinationService.updateActivitiesInDestination(destinationId, activityList);
     }
 
