@@ -9,8 +9,8 @@ import java.util.Map;
 public class PassengerDetailsDto {
     private String passengerName;
     private Integer passengerNumber;
-    private Float walletBalance;
-    private Map<String, List<SignedUpActivityDetails>> destinationToSignedUpActivities;
+    private Double walletBalance;
+    private Map<Long, List<SignedUpActivityDetails>> destinationToSignedUpActivities;
 
     @Getter
     @Setter
@@ -18,6 +18,6 @@ public class PassengerDetailsDto {
     @NoArgsConstructor
     public static class SignedUpActivityDetails{
         private String activityName;
-        private Float costPaidByPassenger;
+        private Double costPaidByPassenger;
     }
 }

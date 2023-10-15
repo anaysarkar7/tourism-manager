@@ -2,28 +2,36 @@ package com.travelpackagemanager.main.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Setter
-@Getter
 @Entity
+@Table(name = "activities")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long activityId;
-    @OneToOne
-    private Destination destination;
+    private Long id;
     private String name;
     private String description;
-    private Float cost;
+    private Double cost;
     private Integer capacity;
+    @ManyToOne
+    @JoinColumn(name = "destination_id")
+    private Destination destination;
     private Integer enrolledPassengersCount;
-    @ManyToMany
-    private List<Passenger> enrolledPassengersList;
+    @ManyToMany(mappedBy = "activityList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Passenger> passengers;
+
+    @Override
+    public String toString() {
+        return "id=" + id +
+                        ", name='" + name + '\'' +
+                        // Include other relevant properties here
+                        '}';
+    }
 }

@@ -10,6 +10,7 @@ import com.travelpackagemanager.main.models.Passenger;
 import com.travelpackagemanager.main.models.TravelPackage;
 import com.travelpackagemanager.main.repositories.PassengerRepository;
 import com.travelpackagemanager.main.repositories.TravelPackageRepository;
+import com.travelpackagemanager.main.services.strategy.MemberStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ public class TravelAgencyService {
 
     @Autowired
     private TravelPackageRepository travelPackageRepository;
-
+    @Autowired
+    private PassengerTypeFactory passengerTypeFactory;
     @Autowired
     private PassengerRepository passengerRepository;
 
@@ -61,9 +63,21 @@ public class TravelAgencyService {
         passengerDetailsDto.setPassengerName(passenger.getName());
         passengerDetailsDto.setPassengerNumber(passenger.getPassengerNumber());
         passengerDetailsDto.setWalletBalance(passenger.getWalletBalance());
-        Map<String, List<PassengerDetailsDto.SignedUpActivityDetails>> destinationToActivityDetailsMap = new HashMap<>();
-
-        //to-do 3. d. point
+        Map<Long, List<PassengerDetailsDto.SignedUpActivityDetails>> destinationToActivityDetailsMap = new HashMap<>();
+        MemberStrategy memberStrategy = passengerTypeFactory.getMemberTypeStrategy(passenger.getPassengerType());
+        for (Activity activity : passenger.getActivityList()) {
+            List<PassengerDetailsDto.SignedUpActivityDetails> signedUpActivityDetailsList;
+            if(destinationToActivityDetailsMap.containsKey(activity.getDestination().getId())) {
+                signedUpActivityDetailsList = destinationToActivityDetailsMap.get(activity.getDestination().getId());
+            }
+            else signedUpActivityDetailsList = new ArrayList<>();
+            PassengerDetailsDto.SignedUpActivityDetails signedUpActivityDetails = new PassengerDetailsDto.SignedUpActivityDetails();
+            signedUpActivityDetails.setActivityName(activity.getName());
+            Double costPaid = memberStrategy.getDiscount(activity.getCost());
+            signedUpActivityDetails.setCostPaidByPassenger(costPaid);
+            signedUpActivityDetailsList.add(signedUpActivityDetails);
+            destinationToActivityDetailsMap.put(activity.getDestination().getId(), signedUpActivityDetailsList);
+        }
 
         passengerDetailsDto.setDestinationToSignedUpActivities(destinationToActivityDetailsMap);
         return passengerDetailsDto;

@@ -2,22 +2,29 @@ package com.travelpackagemanager.main.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Setter
-@Getter
 @Entity
+@Table(name = "destinations")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Destination {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long destinationId;
+    private Long id;
     private String name;
-    @OneToMany
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Activity> activityList;
+
+    @Override
+    public String toString() {
+        return "id=" + id +
+                ", name='" + name + '\'' +
+                // Include other relevant properties here
+                '}';
+    }
 }

@@ -1,7 +1,7 @@
 package com.travelpackagemanager.main.dtos;
 
 import com.travelpackagemanager.main.models.Activity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -9,7 +9,10 @@ import java.util.List;
 public class AvailableActivitiesDto {
     private List<AvailableActivity> availableActivityList;
 
-    @Data
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class AvailableActivity {
         Activity activity;
         Integer noOfSpacesAvailable;
